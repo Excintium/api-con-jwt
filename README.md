@@ -1,98 +1,172 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# 🛠️ API Productos con Autenticación JWT (NestJS + PostgreSQL)
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Proyecto backend desarrollado con **NestJS**, **TypeORM** y **PostgreSQL**, que implementa un sistema completo de **autenticación JWT** para proteger rutas y gestionar usuarios, junto con un módulo CRUD de productos.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+---
 
-## Description
+## 🚀 Características Principales
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- ✅ CRUD completo para productos (`create`, `read`, `update`, `delete`)
+- 🔐 Autenticación y autorización con **JWT**
+- 🧾 Validación de datos con `class-validator` y `class-transformer`
+- 🧰 Uso de `TypeORM` con entidades, repositorios y relaciones
+- ⚙️ Variables de entorno gestionadas con `@nestjs/config`
+- 🧠 Arquitectura modular (módulos `auth`, `users`, `productos`)
+- 🐘 Base de datos PostgreSQL
+- ⚡ Compatible con `npm run start:dev` sin Docker Compose
 
-## Project setup
+---
 
-```bash
-$ npm install
-```
+## 🧩 Estructura del Proyecto
 
-## Compile and run the project
+src/
+├── app.module.ts
+├── main.ts
+│
+├── productos/
+│ ├── dto/
+│ ├── entities/
+│ ├── productos.controller.ts
+│ ├── productos.service.ts
+│ └── productos.module.ts
+│
+├── users/
+│ ├── entities/
+│ ├── dto/
+│ ├── users.service.ts
+│ └── users.module.ts
+│
+└── auth/
+├── dto/
+├── guard/
+├── decorators/
+├── types/
+├── auth.controller.ts
+├── auth.service.ts
+└── auth.module.ts
 
-```bash
-# development
-$ npm run start
+yaml
+Copiar código
 
-# watch mode
-$ npm run start:dev
+---
 
-# production mode
-$ npm run start:prod
-```
+## ⚙️ Configuración del Entorno
 
-## Run tests
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+Crea un archivo `.env` en la raíz del proyecto:
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
-```
+DB_HOST=127.0.0.1
+DB_PORT=5432
+DB_USERNAME=postgres
+DB_PASSWORD=sys
+DB_NAME=db_productos
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+PORT=3000
 
-## Resources
+JWT_SECRET=aveces_yo_gomito
+JWT_EXPIRES=1d
+⚠️ Importante: No compartas tu JWT_SECRET públicamente.
+En producción, usa un gestor de secretos como AWS Secrets Manager o HashiCorp Vault.
 
-Check out a few resources that may come in handy when working with NestJS:
+🧱 Instalación
+Clonar el repositorio:
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+bash
+Copiar código
+git clone https://github.com/Excintium/api-con-jwt.git
+cd api-con-jwt
+Instalar dependencias:
 
-## Support
+bash
+Copiar código
+npm install
+Verifica tu conexión a PostgreSQL (local o Docker).
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+Ejecutar en modo desarrollo:
 
-## Stay in touch
+bash
+Copiar código
+npm run start:dev
+La API se iniciará en
+👉 http://localhost:3000
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+🧾 Endpoints Principales
+🧍‍♂️ Autenticación (/auth)
+Método	Ruta	Descripción
+POST	/auth/register	Registrar un nuevo usuario
+POST	/auth/login	Iniciar sesión y obtener token
+GET	/auth/profile	Obtener perfil del usuario autenticado (requiere token)
 
-## License
+Ejemplo de Login
+bash
+Copiar código
+curl -X POST http://localhost:3000/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"nico@example.com","password":"123456"}'
+Respuesta:
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+json
+Copiar código
+{
+  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6...",
+  "email": "nico@example.com",
+  "name": "Nico"
+}
+📦 Productos (/productos)
+Método	Ruta	Descripción
+POST	/productos	Crear producto
+GET	/productos	Obtener todos
+GET	/productos/:id	Obtener por ID
+PATCH	/productos/:id	Actualizar producto
+DELETE	/productos/:id	Eliminar producto
+
+🔒 Rutas protegidas con AuthGuard mediante Bearer Token.
+
+🧪 Pruebas con cURL o Postman
+bash
+Copiar código
+# Registrar usuario
+curl -X POST http://localhost:3000/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Nico","email":"nico@example.com","password":"123456"}'
+
+# Login
+curl -X POST http://localhost:3000/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"nico@example.com","password":"123456"}'
+
+# Acceder a ruta protegida
+curl -X GET http://localhost:3000/auth/profile \
+  -H "Authorization: Bearer TU_TOKEN"
+🧠 Buenas Prácticas
+Usa DTOs con validaciones estrictas
+
+No expongas contraseñas en texto plano
+
+Implementa bcryptjs para hashear contraseñas
+
+Define expiraciones razonables para JWT (JWT_EXPIRES)
+
+Usa HTTPS en entornos productivos
+
+🧭 Próximos Pasos Recomendados
+📜 Integrar documentación Swagger/OpenAPI
+
+🔁 Implementar refresh tokens
+
+🧮 Agregar paginación y filtros en productos
+
+🧪 Tests unitarios e integración
+
+🧩 Relaciones entre entidades (usuarios ↔ productos)
+
+🛡️ Desactivar synchronize: true en producción y usar migraciones
+
+👨‍💻 Autor
+Nicolás Esteban Fonseca Olivares
+Desarrollador Fullstack & Científico de Datos en formación
+🔗 GitHub: @Excintium
+
+🏷️ Licencia
+Este proyecto está bajo la licencia MIT.
+Eres libre de usarlo, modificarlo y compartirlo con atribución.****
