@@ -1,4 +1,11 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+  DeleteDateColumn,
+} from 'typeorm';
 
 @Entity('productos')
 export class Producto {
@@ -9,16 +16,13 @@ export class Producto {
   nombre: string;
 
   @Column({ type: 'text', nullable: true })
-  descripcion: string;
+  description: string;
 
   @Column({ type: 'decimal', precision: 10, scale: 2 })
   precio: number;
 
   @Column({ type: 'int', default: 0 })
   stock: number;
-
-  @Column({ type: 'varchar', length: 50, nullable: true })
-  categoria: string;
 
   @Column({ type: 'boolean', default: true })
   activo: boolean;
