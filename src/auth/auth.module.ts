@@ -9,7 +9,7 @@ import { AuthService } from './auth.service';
 import { AuthGuard } from './guard/auth.guard';
 
 type DurationUnit = 'ms' | 's' | 'm' | 'h' | 'd' | 'w' | 'y';
-type DurationString = `${number}${DurationUnit}`; // <- "1d", "30m", etc.
+type DurationString = `${number}${DurationUnit}`; // ej: "1d", "30m"
 
 @Module({
   imports: [
@@ -17,6 +17,7 @@ type DurationString = `${number}${DurationUnit}`; // <- "1d", "30m", etc.
     PassportModule,
     ConfigModule,
     JwtModule.registerAsync({
+      global: true,                 // <-- opcional, pero útil
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (config: ConfigService): JwtModuleOptions => {
@@ -24,17 +25,18 @@ type DurationString = `${number}${DurationUnit}`; // <- "1d", "30m", etc.
 
         let expiresIn: number | DurationString;
         if (/^\d+$/.test(raw)) {
-          // solo dígitos => segundos como number
-          expiresIn = parseInt(raw, 10);
+          expiresIn = parseInt(raw, 10); // segundos
         } else {
-          // forzamos a template-literal válido (1d, 2h, 30m, etc.)
-          expiresIn = raw as DurationString;
+          expiresIn = raw as DurationString; // "1d", "2h", etc.
         }
 
+        const secret =
+          config.get<string>('JWT_SECRET') ?? 'DEV_ONLY_SECRET_CHANGE_ME';
+        console.log('JWT_SECRET en runtime:', secret);
+
         return {
-          secret:
-            config.get<string>('JWT_SECRET') ?? 'DEV_ONLY_SECRET_CHANGE_ME',
-          signOptions: { expiresIn }, // ahora coincide con el tipo esperado
+          secret,
+          signOptions: { expiresIn }, // <-- OJO: signOptions (con n)
         };
       },
     }),

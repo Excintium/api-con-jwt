@@ -1,29 +1,37 @@
 // src/auth/guard/auth.guard.ts
-import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  CanActivate,
+  ExecutionContext,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { Request } from 'express';
-import { jwtConstants } from '../constants/jwt.constant';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  constructor(private readonly jwt: JwtService) {}
+  constructor(
+    private readonly jwt: JwtService,
+    private readonly config: ConfigService,
+  ) {}
 
   async canActivate(ctx: ExecutionContext): Promise<boolean> {
-    const req: Request = ctx.switchToHttp().getRequest();
-    const token = this.extractToken(req);
-    if (!token) throw new UnauthorizedException('Token no proporcionado');
+    const req = ctx.switchToHttp().getRequest();
+    const auth = req.headers.authorization as string | undefined;
+
+    if (!auth || !auth.startsWith('Bearer ')) {
+      throw new UnauthorizedException('Token no proporcionado');
+    }
+
+    const token = auth.slice(7);
     try {
-      req.user = await this.jwt.verifyAsync(token, {
-        secret: jwtConstants.secret,
+      const payload = await this.jwt.verifyAsync(token, {
+        secret: this.config.get<string>('JWT_SECRET'),
       });
+      req.user = payload;
       return true;
     } catch {
       throw new UnauthorizedException('Token inválido o expirado');
     }
-  }
-
-  private extractToken(req: Request): string | undefined {
-    const [type, token] = req.headers.authorization?.split(' ') ?? [];
-    return type === 'Bearer' ? token : undefined;
   }
 }

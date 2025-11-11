@@ -4,14 +4,18 @@ import {
   Post,
   Body,
   Patch,
+  Put,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { ProductosService } from './productos.service';
 import { CreateProductoDto } from './dto/create-producto.dto';
 import { UpdateProductoDto } from './dto/update-producto.dto';
+import { AuthGuard } from '../auth/guard/auth.guard';
 
 @Controller('productos')
+@UseGuards(AuthGuard)
 export class ProductosController {
   constructor(private readonly productosService: ProductosService) {}
 
@@ -30,7 +34,7 @@ export class ProductosController {
     return this.productosService.findOne(+id);
   }
 
-  @Patch(':id')
+  @Put(':id')
   update(
     @Param('id') id: string,
     @Body() updateProductoDto: UpdateProductoDto,
